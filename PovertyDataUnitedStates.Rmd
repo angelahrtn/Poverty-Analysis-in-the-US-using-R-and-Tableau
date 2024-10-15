@@ -1,0 +1,99 @@
+---
+title: "Lab Assignment No 1"
+output: html_document
+date: "2023-06-08"
+---
+
+```{r}
+# Library
+library(magrittr)  # to use piping %>%
+library(ggplot2)   # for ploting
+library(MASS)      # to calculate the pseudo-inverse of a matrix
+library(caret)     # to center our data by subtracting its mean
+library(reshape2)  # for data manipulation
+library(dplyr)
+library(corrplot)
+library(stringr)
+#install.packages("ltm")
+library(ltm)
+library(polycor)
+#install.packages("e1071")
+library(e1071)
+#install.packages("broom")
+library(broom)
+```
+
+```{r}
+# Load the data
+data <- read.csv("us_county_sociohealth_data.csv")
+
+# Read data
+data
+```
+
+```{r}
+# Summarize dataset
+cat("Number of Coloumns: ", ncol(data))
+cat("\n")
+cat("Number of Rows: ", nrow(data))
+cat("\n")
+cat("All Variabel Names: ") 
+cat("\n")
+names(data)
+```
+
+# Case Analysis
+```{r}
+# Specify the columns to keep
+columns_to_keep <- c("state", "county", "num_below_poverty", "num_no_highschool_diploma")
+
+# Subset the dataframe
+data <- data[, columns_to_keep]
+data
+```
+
+```{r}
+# Display first 10 data in the dataset
+head(data, 10)
+```
+```{r}
+# Summarize
+cat("Number of Coloumns: ", ncol(data))
+cat("\n")
+cat("Number of Rows: ", nrow(data))
+cat("\n")
+cat("All Variabel Names: ") 
+cat("\n")
+names(data)
+```
+
+## Handling missing values
+```{r}
+# Check NULL (missing values/anomalies) can be seen in missFrac in the table below
+basicSummary(data, 3)
+```
+
+###other ways
+```{r}
+# Check NULL (missing values/anomalies) in every column
+null_count <- colSums(is.na(data))
+print(null_count)
+```
+
+```{r}
+# Top 10 highest values poverty in US
+top_10 <- head(data[order(data$num_below_poverty, decreasing = TRUE), ], 10)
+print(top_10)
+```
+
+```{r}
+# Accurate summary
+summary_data<- summary(data)
+summary_data
+```
+ 
+```{r}
+#correlation beetween poverty and no high school diploma
+cor(data$num_below_poverty, data$num_no_highschool_diploma)
+```
+Dapat disimpulkan bahwa jumlah poverty mempengaruhi hasil jumlah no high school diploma
